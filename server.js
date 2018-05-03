@@ -18,6 +18,28 @@ const arrStations = [
     ];
     
     
+const handlers = [];
+
+handlers['/'] = (req, res) => {
+    
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(arrStations)); 
+}
+
+
+handlers['/first'] = (req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(arrStations[0])); 
+}   
+  
+handlers['/second'] = (req, res) => {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify(arrStations[1])); 
+}
+
 const server  = http.createServer((req, res) => {
       
       var pathname = url.parse(req.url, true).pathname;
@@ -25,14 +47,18 @@ const server  = http.createServer((req, res) => {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json');
       
-      if(pathname.indexOf('first') != -1) {
-          
-      res.end(JSON.stringify(arrStations[0]));
-    
+      if(handlers[pathname]) {
+          handlers[pathname](req, res);
       } else {
-       res.end(JSON.stringify(arrStations));         
-                
+          res.statusCode = 404;
+          res.end("Not found!");
       }
+      
+      /* if(pathname.indexOf('first') != -1) {
+      res.end(JSON.stringify(arrStations[0]));
+      } else {
+       res.end(JSON.stringify(arrStations)); 
+      } */
 });
 
 server.listen(port, host,  () => {
