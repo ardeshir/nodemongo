@@ -83,12 +83,29 @@ let listen = new Promise(function(resolve, reject) {
 // Using fs to read file
 // fs.readFile('charging_stations.json', 'utf-8', (err, data) => {
 //      if (err) return;
-// Using read module 
-read('charging_stations.json').then( (data) => {
+
+
+/* read('charging_stations.json').then( (data) => {
      servingData = JSON.parse(data);
      return listen; 
-}).then((message) => console.log(message)).catch((error) => console.log(error));
+}).then((message) => console.log(message)).catch((error) => console.log(error)); */
 
+// Using read module 
+// And async/await 
+
+async function start() {
+    try {
+        servingData = await read('charging_stations.json');
+        servingData = JSON.parse(servingData);
+        console.log(await listen);
+        
+    } catch (error) {
+        console.error(error);
+    }
+    return servingData;
+};
+
+start().then((data) => console.log(data));
 
 module.exports = {
     handlers: handlers,
