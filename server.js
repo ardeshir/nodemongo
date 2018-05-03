@@ -1,6 +1,7 @@
 const http = require('http');
 const url  = require('url');
 const fs   = require('fs');
+const read = require('./read');
 
 const host = '0.0.0.0';
 const port    = '9000';
@@ -67,13 +68,26 @@ const server  = http.createServer((req, res) => {
       } */
 });
 
-fs.readFile('charging_stations.json', 'utf-8', (err, data) => {
-    if (err) return;
-     servingData = JSON.parse(data);
-     server.listen(port, host,  () => {
-        console.log(`Server running on http://${host}:${port}`);
-     });    
+let listen = new Promise(function(resolve, reject) {
+    try {
+        
+      server.listen(port, host,  () => {
+        resolve(`Server running on http://${host}:${port}`);
+       });   
+       
+    } catch(error) {
+         reject(error);
+    }
 });
+
+// Using fs to read file
+// fs.readFile('charging_stations.json', 'utf-8', (err, data) => {
+//      if (err) return;
+// Using read module 
+read('charging_stations.json').then( (data) => {
+     servingData = JSON.parse(data);
+     return listen; 
+}).then((message) => console.log(message)).catch((error) => console.log(error));
 
 
 module.exports = {
