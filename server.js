@@ -17,7 +17,10 @@ const arrStations = [
       type: 'lectric charger' }
     ];
     
-    
+// Build an array of functions as handlers
+// Check for pathname as the key, and call the
+// function that mataches the route
+
 const handlers = [];
 
 handlers['/'] = (req, res) => {
