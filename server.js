@@ -67,3 +67,8 @@ const server  = http.createServer((req, res) => {
 server.listen(port, host,  () => {
     console.log(`Server running on http://${host}:${port}`);
 });
+
+module.exports = {
+    handlers: handlers,
+    data: arrStations
+};
